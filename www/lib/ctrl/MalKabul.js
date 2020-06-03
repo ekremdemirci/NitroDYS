@@ -197,7 +197,8 @@ function MalKabul ($scope,$window,db)
                             [
                                 $scope.StokKodu,
                                 $scope.Skt,
-                                $scope.Miktar * $scope.Katsayi
+                                $scope.Miktar * $scope.Katsayi,
+                                $scope.PaletKodu
                             ];
                             db.ExecuteTag($scope.Firma,'PaletTanimlariUpdate',UpdateData,function(UpdateResult)
                             {
@@ -245,6 +246,8 @@ function MalKabul ($scope,$window,db)
         $scope.StokAdi = ''
         $scope.IslemListe = []
 
+        $scope.EvrakLock = false;
+
 
         $scope.MainClick();
         $scope.DepoGetir();
@@ -284,6 +287,14 @@ function MalKabul ($scope,$window,db)
     }
     $scope.BtnBelgeBilgisi =  function()
     {
+        if($scope.IslemListe.length > 0)
+        {
+            $scope.EvrakLock = true;
+        }
+        else
+        {
+            $scope.EvrakLock = false;
+        }
         $("#TbBelgeBilgisi").addClass('active');
         $("#TbCariSecim").removeClass('active');
         $("#TbMain").removeClass('active');

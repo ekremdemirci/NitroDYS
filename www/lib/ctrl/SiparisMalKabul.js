@@ -268,7 +268,8 @@ function SiparisMalKabul ($scope,$window,db)
                             [
                                 $scope.StokKodu,
                                 $scope.Skt,
-                                $scope.Miktar * $scope.Katsayi
+                                $scope.Miktar * $scope.Katsayi,
+                                $scope.PaletKodu
                             ];
                             db.ExecuteTag($scope.Firma,'PaletTanimlariUpdate',UpdateData,function(UpdateResult)
                             {
@@ -327,6 +328,7 @@ function SiparisMalKabul ($scope,$window,db)
         $scope.IslemListe = []
         $scope.SiparisStokListe = []
         $scope.SiparisListe = []
+        $scope.EvrakLock = false;
         $scope.SipTarih =  moment(new Date()).format("DD.MM.YYYY");
         $scope.SipTarih2 =  moment(new Date()).format("DD.MM.YYYY");
 
@@ -369,6 +371,15 @@ function SiparisMalKabul ($scope,$window,db)
     }
     $scope.BtnBelgeBilgisi =  function()
     {
+        if($scope.IslemListe.length > 0)
+        {
+            $scope.EvrakLock = true;
+
+        }
+        else
+        {
+            $scope.EvrakLock = false;
+        }
         $("#TbBelgeBilgisi").addClass('active');
         $("#TbSiparisSecim").removeClass('active');
         $("#TbMain").removeClass('active');
@@ -399,6 +410,7 @@ function SiparisMalKabul ($scope,$window,db)
         }
         else
         {
+            InsertAfterRefesh();
             $("#TbBarkodGiris").addClass('active');
             $("#TbBelgeBilgisi").removeClass('active');
             $("#TbSiparisSecim").removeClass('active');
