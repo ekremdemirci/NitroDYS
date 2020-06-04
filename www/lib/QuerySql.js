@@ -423,8 +423,38 @@ var QuerySql =
         "FROM EMIRLER WHERE SERI = @SERI AND SIRA = @SIRA AND KODU = @STOK AND TIP = @TIP AND CINS = @CINS",
         param: ['SERI','SIRA','STOK','TIP','CINS'],
         type: ['string|50','int','string|50','int','int']
-    }
-
+    },
+    PersonelTanimlariKaydet : 
+    {
+        query : "DECLARE @TMPCODE NVARCHAR(25) " +
+                "SET @TMPCODE = ISNULL((SELECT KODU FROM PERSONEL WHERE KODU = @KODU),'') " +
+                "IF @TMPCODE = '' " +
+                "INSERT INTO [dbo].[PERSONEL] " + 
+                "([OTARIH] " + 
+                ",[DTARIH] " + 
+                ",[OKULLANICI] " + 
+                ",[DKULLANICI] " + 
+                ",[KODU] " + 
+                ",[ADI] " + 
+                ",[TIP]) " + 
+                "VALUES " + 
+                "(GETDATE()		    --<OTARIH, datetime,> \n" +
+                ",GETDATE()		    --<DTARIH, datetime,> \n" +
+                ",@OKULLANICI		--<OKULLANICI, nvarchar(10),> \n" +
+                ",@DKULLANICI		--<DKULLANICI, nvarchar(10),> \n" +
+                ",@KODU			    --<KODU, nvarchar(25),> \n" +
+                ",@ADI			    --<ADI, nvarchar(50),> \n" +
+                ",@TIP			    --<TIP, int,> \n" +
+                ") " +
+                "ELSE " + 
+                "UPDATE [dbo].[PERSONEL] SET " +
+                "[DKULLANICI] = @DKULLANICI " +
+                ",[DTARIH] = GETDATE() " +
+                ",[ADI] = @ADI " +
+                ",[TIP] = @TIP " +
+                "WHERE [KODU] = @TMPCODE",
+        param : ['OKULLANICI:string|10','DKULLANICI:string|10','KODU:string|25','ADI:string|25','TIP:int']
+    },
     
 };
 

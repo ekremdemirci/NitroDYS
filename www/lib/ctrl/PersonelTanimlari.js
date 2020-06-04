@@ -61,9 +61,20 @@ function PersonelTanimlari ($scope,$window,db)
     function Getir(pKodu)
     {
         $scope.DataListe = [];
-        db.GetData($scope.Firma,'RafKategoriTanimlariGetir',[pKodu],function(Data)
+        console.log($scope.DataListe)
+        let TmpQuery = 
+        {
+            db : $scope.Firma,
+            query:  "SELECT KODU,ADI,TIP FROM PERSONEL WHERE KODU = @KODU",
+            param : ['KODU'],
+            type : ['string|25'],
+            value : [pKodu]
+        }
+        db.GetDataQuery(TmpQuery,function(Data)
         {
             $scope.DataListe = Data;
+            console.log($scope.DataListe[0].TIP)
+            
         });
     }
     $scope.Init = function()
@@ -99,10 +110,11 @@ function PersonelTanimlari ($scope,$window,db)
                     UserParam.Kullanici,
                     UserParam.Kullanici,
                     $scope.DataListe[0].KODU,
-                    $scope.DataListe[0].ADI
+                    $scope.DataListe[0].ADI,
+                    $scope.DataListe[0].TIP
                 ];
                 
-                db.ExecuteTag($scope.Firma,'RafKategoriTanimlariKaydet',InsertData,function(InsertResult)
+                db.ExecuteTag($scope.Firma,'PersonelTanimlariKaydet',InsertData,function(InsertResult)
                 { 
                     if(typeof(InsertResult.result.err) == 'undefined')
                     {  
@@ -148,7 +160,7 @@ function PersonelTanimlari ($scope,$window,db)
         let TmpQuery = 
         {
             db : $scope.Firma,
-            query:  "SELECT KODU,ADI FROM RAF_KATEGORI"
+            query:  "SELECT KODU,ADI,TIP FROM PERSONEL"
         }
         db.GetDataQuery(TmpQuery,function(Data)
         {
